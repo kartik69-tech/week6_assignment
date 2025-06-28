@@ -48,6 +48,7 @@ It features both incremental loading and automated scheduling, including:
 - Confirmed that triggers work as expected
 
 ## Structure
+```
 
 ├── pipelines/
 │   └── OnPremToAzurePipeline.json
