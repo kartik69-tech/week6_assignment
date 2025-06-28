@@ -1,0 +1,6 @@
+selected resource name:		OnPremToAzurePipeline
+selected resource type:		pipeline
+factory name:			KartikADF123
+factory location:		centralindia
+subscription id:		517a151e-788f-4a57-bf3b-c7ca5173e743
+time of download (UTC):		Sat, 28 Jun 2025 11:25:55 GMT

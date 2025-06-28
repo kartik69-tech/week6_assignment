@@ -1,0 +1,136 @@
+{
+    "name": "IncrementalLoadPipeline",
+    "properties": {
+        "activities": [
+            {
+                "name": "GetWatermark",
+                "type": "Lookup",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "AzureSqlSource",
+                        "sqlReaderQuery": "SELECT LastWatermark FROM WatermarkTracking WHERE TableName = 'Customers'\n",
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
+                    },
+                    "dataset": {
+                        "referenceName": "DS_AzureSQL_Dummy",
+                        "type": "DatasetReference"
+                    },
+                    "firstRowOnly": true
+                }
+            },
+            {
+                "name": "CopyNewData",
+                "type": "Copy",
+                "dependsOn": [
+                    {
+                        "activity": "GetWatermark",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "SqlServerSource",
+                        "sqlReaderQuery": {
+                            "value": "SELECT * FROM Customers\nWHERE LastModifiedDate > '@{activity('GetWatermark').output.firstRow.LastWatermark}'\n",
+                            "type": "Expression"
+                        },
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
+                    },
+                    "sink": {
+                        "type": "AzureSqlSink",
+                        "writeBehavior": "insert",
+                        "sqlWriterUseTableLock": false
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                            "allowDataTruncation": true,
+                            "treatBooleanAsNumber": false
+                        }
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "DS_OnPrem_Customers",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "DS_Azure_Customers",
+                        "type": "DatasetReference"
+                    }
+                ]
+            },
+            {
+                "name": "UpdateWatermark",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                    {
+                        "activity": "CopyNewData",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "storedProcedureName": "[dbo].[UpdateWatermark]",
+                    "storedProcedureParameters": {
+                        "NewWatermark": {
+                            "value": {
+                                "value": "@utcNow()\n",
+                                "type": "Expression"
+                            },
+                            "type": "Datetime"
+                        },
+                        "TableName": {
+                            "value": {
+                                "value": "@utcNow()",
+                                "type": "Expression"
+                            },
+                            "type": "String"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "AzureSqlDatabase1",
+                    "type": "LinkedServiceReference"
+                }
+            }
+        ],
+        "annotations": [],
+        "lastPublishTime": "2025-06-27T21:10:23Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

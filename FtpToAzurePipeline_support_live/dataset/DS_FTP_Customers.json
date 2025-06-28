@@ -1,0 +1,23 @@
+{
+    "name": "DS_FTP_Customers",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "FtpServer1",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "DelimitedText",
+        "typeProperties": {
+            "location": {
+                "type": "FtpServerLocation",
+                "fileName": "Customers.csv"
+            },
+            "columnDelimiter": ",",
+            "escapeChar": "\\",
+            "firstRowAsHeader": true,
+            "quoteChar": "\""
+        },
+        "schema": []
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

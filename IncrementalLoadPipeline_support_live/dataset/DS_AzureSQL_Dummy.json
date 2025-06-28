@@ -1,0 +1,28 @@
+{
+    "name": "DS_AzureSQL_Dummy",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "AzureSqlDatabase1",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "TableName",
+                "type": "nvarchar"
+            },
+            {
+                "name": "LastWatermark",
+                "type": "datetime",
+                "precision": 23,
+                "scale": 3
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "WatermarkTracking"
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}

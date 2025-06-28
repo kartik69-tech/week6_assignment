@@ -1,0 +1,7 @@
+{
+    "name": "MyLocalSHIR",
+    "properties": {
+        "type": "SelfHosted",
+        "description": "SHIR for accessing local SQL Server on-premises"
+    }
+}

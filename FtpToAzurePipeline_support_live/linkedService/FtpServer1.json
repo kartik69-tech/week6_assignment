@@ -1,0 +1,21 @@
+{
+    "name": "FtpServer1",
+    "type": "Microsoft.DataFactory/factories/linkedservices",
+    "properties": {
+        "annotations": [],
+        "type": "FtpServer",
+        "typeProperties": {
+            "host": "192.168.29.232",
+            "port": 21,
+            "enableSsl": false,
+            "enableServerCertificateValidation": false,
+            "authenticationType": "Basic",
+            "userName": "ftp-user",
+            "encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJhY2ZjOTI2Zi03MDMwLTRhMDMtYmQzYi0wYzkzNzRiN2JjMmYiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+        },
+        "connectVia": {
+            "referenceName": "MyLocalSHIR",
+            "type": "IntegrationRuntimeReference"
+        }
+    }
+}
